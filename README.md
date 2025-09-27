@@ -34,7 +34,7 @@ Server will be running at `http://localhost:8000`
 
 ## API Curl Requests & Responses
 
-Health check endpoint
+1. ) Health check endpoint
 
 _request_
 ```bash
@@ -48,7 +48,7 @@ _response_
 
 ---
 
-Endpoint to add Offer/Product
+2. ) Endpoint to add Offer/Product
 
 _request_
 ```bash
@@ -66,7 +66,7 @@ _response_
 
 ---
 
-Endpoint to upload leads csv
+3. ) Endpoint to upload leads csv
 
 _request_
 ```bash
@@ -81,7 +81,7 @@ _response_
 
 ---
 
-Endpoint to trigger score calculation
+4. ) Endpoint to trigger score calculation
 
 _request_
 ```bash
@@ -95,7 +95,7 @@ _response_
 
 ---
 
-Endpoint to get list of result JSONs
+5. ) Endpoint to get list of result JSONs
 
 _request_
 ```bash
@@ -104,7 +104,7 @@ curl -X GET "localhost:8000/results"
 
 _response_
 ```bash
-{"total_leads":20,"results":[lead_dict = {
+{"total_leads":20,"results":[{
     "name": "John Smith",
     "role": "CEO",
     "company": "TechFlow Inc",
@@ -125,7 +125,7 @@ _response_
 
 ---
 
-Endpoint to download results csv
+6. ) Endpoint to download results csv
 
 _request_
 ```bash

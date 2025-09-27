@@ -34,6 +34,8 @@ Server will be running at `http://localhost:8000`
 
 ## API Curl Requests & Responses
 
+Health check endpoint
+
 _request_
 ```bash
 curl -X GET "localhost:8000/"
@@ -45,6 +47,8 @@ _response_
 ```
 
 ---
+
+Endpoint to add Offer/Product
 
 _request_
 ```bash
@@ -62,6 +66,8 @@ _response_
 
 ---
 
+Endpoint to upload leads csv
+
 _request_
 ```bash
 curl -X POST "localhost:8000/leads/upload" \
@@ -75,6 +81,8 @@ _response_
 
 ---
 
+Endpoint to trigger score calculation
+
 _request_
 ```bash
 curl -X POST "localhost:8000/score"
@@ -87,6 +95,8 @@ _response_
 
 ---
 
+Endpoint to get list of result JSONs
+
 _request_
 ```bash
 curl -X GET "localhost:8000/results"
@@ -98,6 +108,8 @@ _response_
 ```
 
 ---
+
+Endpoint to download results csv
 
 _request_
 ```bash
@@ -132,3 +144,5 @@ Product/Offer: {offer['name']}
             
             Format: INTENT: [High/Medium/Low] | REASONING: [explanation]
 ```
+
+ChatGPT is very good when it comes to analysis tasks such as this one. Unlike other models like Claude, which are focused on programming, Openai provides good responses in text-based tasks. 

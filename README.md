@@ -7,7 +7,7 @@ Render: https://kuvaka-tech-3jnl.onrender.com/
 Step 1: Save .env in project directory.
 Sample .env:
 ```bash
-OPENAI_API_KEY=90784c4666b608888f85fb1e2ad5b6cc
+GEMINI_API_KEY=90784c4666b608888f85fb1e2ad5b6cc
 9c82415e458c59fe20c6f90697c3f98a
 43d7b16c05376544c29fccae8f26e584
 58d51565d69c85fbd375cf3bcd6eb56e
@@ -104,7 +104,23 @@ curl -X GET "localhost:8000/results"
 
 _response_
 ```bash
-{"total_leads":20,"results":[{"name":"John Smith","role":"CEO","company":"TechFlow Inc","industry":"Software","intent":"High","score":75,"reasoning":"Rules: Decision maker role detected (+20) | Exact ICP match (+20) | Complete profile (+10) | AI: AI analysis unavailable; You exceeded your current quota ;Using default Medium intent and 25 score","data_completeness":"Complete"}, ... ]}
+{"total_leads":20,"results":[lead_dict = {
+    "name": "John Smith",
+    "role": "CEO",
+    "company": "TechFlow Inc",
+    "industry": "Software",
+    "intent": "High",
+    "score": 100,
+    "reasoning": (
+        "Rules: Decision maker role detected (+20) | Exact ICP match (+20) | Complete profile (+10) | "
+        "AI: AI analysis: INTENT: High | REASONING: As CEO of a B2B SaaS company in a related space "
+        "(workflow automation), John likely understands the importance of sales efficiency and growth – "
+        "our AI outreach automation directly addresses those needs, especially given his company size likely "
+        "benefits from scaling outreach"
+    ),
+    "data_completeness": "Complete"
+}
+, ... ]}
 ```
 
 ---

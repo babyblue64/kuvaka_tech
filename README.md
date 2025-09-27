@@ -1,3 +1,7 @@
+## Live link
+
+Render: https://kuvaka-tech-3jnl.onrender.com/
+
 ## Setup Steps
 
 Step 1: Save .env in project directory.

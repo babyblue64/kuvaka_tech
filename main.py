@@ -3,6 +3,8 @@ from pydantic_models import Offer, Lead
 import pandas as pd
 from pydantic import ValidationError
 from scoring import calculate_total_score
+import io
+from fastapi.responses import StreamingResponse
 
 app = FastAPI()
 
@@ -122,9 +124,31 @@ def trigger_scoring():
 # Return scored lead JSONs in an array
 @app.post('/results')
 def return_scored_leads():
-    pass
+    if not scored_results:
+        raise HTTPException(status_code=404, detail="No results available. Run POST /score to generate results")
+    
+    return {
+        "total_leads": len(scored_results),
+        "results": scored_results
+    }
 
 # Return results as csv
 @app.post('/csvresults')
 def return_results_csv():
-    pass
+    if not scored_results:
+        raise HTTPException(status_code=404, detail="No results available. Run POST /score to generate results")
+    
+    try:
+        df = pd.DataFrame(scored_results) # convert list of dict to dataframe
+
+        csv_buffer = io.StringIO() # create file like object
+        df.to_csv(csv_buffer, index=False)
+        csv_content = csv_buffer.getvalue()
+
+        return StreamingResponse( # return as downloadable csv file
+            io.BytesIO(csv_content.encode()),
+            media_type="text/csv",
+            headers={"Content-Disposition": "attachment; filename=scored_leads.csv"}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating CSV: {str(e)}")

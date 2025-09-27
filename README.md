@@ -125,7 +125,7 @@ _response_
 
 ---
 
-## Prompt used
+## Prompt
 
 ```Python
 Product/Offer: {offer['name']}
@@ -145,4 +145,10 @@ Product/Offer: {offer['name']}
             Format: INTENT: [High/Medium/Low] | REASONING: [explanation]
 ```
 
-ChatGPT is very good when it comes to analysis tasks such as this one. Unlike other models like Claude, which are focused on programming, Openai provides good responses in text-based tasks. 
+## Model
+
+_gemma-3-27b-it_
+
+From Google.
+
+Trying openai and hugginface, I had to struggle over depracated methods and quota limits. Google's Gemini's mini version Gemma is light-weight but responsive. It helped me integrate AI scoring in this project

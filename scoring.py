@@ -5,8 +5,6 @@ import os
 
 load_dotenv()
 
-# openai_client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
 def calculate_rule_score(lead: dict[str, Any], is_validated: bool = True, missing_value_count: int = 0):
     score = 0
     reasons = []

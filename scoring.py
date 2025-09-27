@@ -1,7 +1,7 @@
 from typing import Any, Tuple
-import requests
 from dotenv import load_dotenv
 import os
+from google import genai
 
 load_dotenv()
 
@@ -55,77 +55,51 @@ def calculate_rule_score(lead: dict[str, Any], is_validated: bool = True, missin
     return score, " | ".join(reasons)
 
 def calculate_ai_score(lead: dict[str, Any], offer: dict[str, Any]) -> Tuple[int, str, str]:
-    """
-    Calculate AI score using Hugging Face's free Inference API
-    Get your free API key at: https://huggingface.co/settings/tokens
-    """
-    hf_token = os.getenv("HF_TOKEN")  # Set your Hugging Face token
-    
-    if not hf_token:
-        return 25, "Hugging Face token not found. Using default score.", "Medium"
-    
+    gemini_api_key = os.getenv("GEMINI_API_KEY")
+
+    if not gemini_api_key:
+        return 25, "Gemini api key not found. Using default score.", "Medium"
+
     try:
-        # Create prompt for AI
         prompt = f"""
-Product/Offer: {offer['name']}
-Value Props: {', '.join(offer['value_props'])}
-Ideal Use Cases: {', '.join(offer['ideal_use_cases'])}
+            Product/Offer: {offer['name']}
+            Value Props: {', '.join(offer['value_props'])}
+            Ideal Use Cases: {', '.join(offer['ideal_use_cases'])}
 
-Prospect:
-- Name: {lead.get('name', 'Unknown')}
-- Role: {lead.get('role', 'Unknown')}
-- Company: {lead.get('company', 'Unknown')}
-- Industry: {lead.get('industry', 'Unknown')}
-- LinkedIn Bio: {lead.get('linkedin_bio', 'Unknown')}
+            Prospect:
+            - Name: {lead.get('name', 'Unknown')}
+            - Role: {lead.get('role', 'Unknown')}
+            - Company: {lead.get('company', 'Unknown')}
+            - Industry: {lead.get('industry', 'Unknown')}
+            - LinkedIn Bio: {lead.get('linkedin_bio', 'Unknown')}
+            Based on the prospect's profile and the product offering, classify their buying intent as High, Medium, or Low.
+            Explain your reasoning in 1-2 sentences focusing on role fit, industry alignment, and potential need.
 
-Based on the prospect's profile and the product offering, classify their buying intent as High, Medium, or Low.
-Explain your reasoning in 1-2 sentences focusing on role fit, industry alignment, and potential need.
+            Format: INTENT: [High/Medium/Low] | REASONING: [explanation]
+        """
+    
+        client = genai.Client(api_key=gemini_api_key)
 
-Format: INTENT: [High/Medium/Low] | REASONING: [explanation]
-"""
+        response = client.models.generate_content(
+            model="gemma-3-27b-it",
+            contents=prompt,
+        )
 
-        # Use Hugging Face's free inference API
-        API_URL = "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium"
-        headers = {"Authorization": f"Bearer {hf_token}"}
-        
-        payload = {
-            "inputs": prompt,
-            "parameters": {
-                "max_length": 200,
-                "temperature": 0.3,
-                "do_sample": True
-            }
-        }
-        
-        response = requests.post(API_URL, headers=headers, json=payload)
-        
-        if response.status_code == 200:
-            result = response.json()
-            ai_response = result[0]['generated_text'] if result else ""
+        response = response.text
+        text_lower = response.lower()
+        if any(word in text_lower for word in ['high', 'excellent', 'perfect', 'ideal']):
+            score, intent = 50, "High"
+        elif any(word in text_lower for word in ['medium', 'moderate', 'possible', 'potential']):
+            score, intent = 30, "Medium"
         else:
-            raise Exception(f"HF API error: {response.status_code}")
-            
-        # Parse response
-        if "High" in ai_response:
-            score = 50
-            intent = "High"
-        elif "Medium" in ai_response:
-            score = 30
-            intent = "Medium"
-        else:
-            score = 10
-            intent = "Low"
-            
-        # Extract reasoning
-        if "REASONING:" in ai_response:
-            reasoning = ai_response.split("REASONING:")[1].strip()
-        else:
-            reasoning = ai_response[-100:]  # Last 100 chars as reasoning
-            
+            score, intent = 10, "Low"
+
+        reasoning = f"AI analysis: {response[:300]}"
         return score, reasoning, intent
-        
+
     except Exception as e:
         return 25, f"AI analysis unavailable: {str(e)}. Using default Medium intent.", "Medium"
+
     
 def calculate_total_score(lead: dict[str, Any], offer: dict[str, Any], is_validated: bool = True, missing_value_count: int = 0):
 

@@ -122,7 +122,7 @@ def trigger_scoring():
         raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
 # Return scored lead JSONs in an array
-@app.post('/results')
+@app.get('/results')
 def return_scored_leads():
     if not scored_results:
         raise HTTPException(status_code=404, detail="No results available. Run POST /score to generate results")

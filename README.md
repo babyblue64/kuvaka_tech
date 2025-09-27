@@ -152,3 +152,7 @@ _gemma-3-27b-it_
 From Google.
 
 Trying openai and hugginface, I had to struggle over depracated methods and quota limits. Google's Gemini's mini version Gemma is light-weight but responsive. It helped me integrate AI scoring in this project
+
+## Navigation Video
+
+Drive link: https://drive.google.com/file/d/1W_pVrBwZd9sLiCyJc_y13NSZjZK8TrOO/view?usp=sharing

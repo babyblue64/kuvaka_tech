@@ -171,4 +171,4 @@ Trying openai and hugginface, I had to struggle over depracated methods and quot
 
 ## Navigation Video
 
-Drive link: https://drive.google.com/file/d/1W_pVrBwZd9sLiCyJc_y13NSZjZK8TrOO/view?usp=sharing
+Loom: https://www.loom.com/share/131c8acdd32d4877a3945e1db123864d?sid=d0106c6f-11e4-4467-b82d-1bd1fa8c2647
